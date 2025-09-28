@@ -30,3 +30,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+// === Token para API con Sanctum ===
+window.axios.defaults.baseURL = '/api';
+
+window.setAuthToken = function (token) {
+    if (token) {
+        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        localStorage.setItem('api_token', token);
+    } else {
+        delete window.axios.defaults.headers.common['Authorization'];
+        localStorage.removeItem('api_token');
+    }
+};
+
+// Restaurar token guardado al recargar
+const savedToken = localStorage.getItem('api_token');
+if (savedToken) {
+    window.setAuthToken(savedToken);
+}

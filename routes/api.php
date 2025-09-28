@@ -21,7 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // Rutas para el controlador de usuarios, asignando nombres personalizados
 
-Route::prefix('usuarios')->group(function () {
+Route::middleware('auth:sanctum')->prefix('usuarios')->group(function () {
+
     Route::get('/listUsers', [UsuarioController::class, 'index']);
     Route::post('/addUser', [UsuarioController::class, 'store']);
     Route::get('/getUser/{id}', [UsuarioController::class, 'show']);
@@ -29,7 +30,9 @@ Route::prefix('usuarios')->group(function () {
     Route::delete('/deleteUser/{id}', [UsuarioController::class, 'destroy']);
 });
 
-Route::get('/tareas', [TareaController::class, 'index']);
-Route::post('/tareas', [TareaController::class, 'store']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tareas', [TareaController::class, 'index']);
+    Route::post('/tareas', [TareaController::class, 'store']);
+});
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
